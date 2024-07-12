@@ -6,13 +6,16 @@ from dataclasses import dataclass
 from src.exception import CustomException
 from src.logger import logging
 
+from src.components.data_transformation import DataTransformation
+from src.components.data_transformation import DataTransformationConfig
+
 @dataclass
 class DataIngestionConfig:
     train_data_path: str = os.path.join('artifacts', 'train.csv')
     test_data_path: str = os.path.join('artifacts', 'test.csv')
     raw_data_path: str = os.path.join('artifacts', 'data.csv')
 
-class DataIngnestion:
+class DataIngestion:
     def __init__(self):
         self.ingestion_Config = DataIngestionConfig()
 
@@ -51,6 +54,11 @@ class DataIngnestion:
         except Exception as e:
             raise CustomException(e, sys)
 
-if __name__ == "__main__":
-    obj = DataIngnestion()
-    obj.initiate_data_ingestion()
+if __name__=="__main__":
+    obj=DataIngestion()
+    train_data,test_data=obj.initiate_data_ingestion()
+
+    data_transformation=DataTransformation()
+    train_arr,test_arr,_=data_transformation.initiate_data_transformation(train_data,test_data)
+
+   
